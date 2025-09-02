@@ -147,3 +147,6 @@ vite.config.ts.timestamp-*
 # Environment files
 .env.*
 !.env.example
+
+# Authentication User file
+userSession.json
