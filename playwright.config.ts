@@ -43,8 +43,22 @@ export default defineConfig({
   /* Configure projects for major browsers */
   projects: [
     {
+      name: "setup",
+      use: {
+        ...devices["Desktop Chrome"],
+        viewport: { width: 1366, height: 768 },
+      },
+      testMatch: /.*\.setup\.ts/,
+    },
+
+    {
       name: "chromium",
-      use: { ...devices["Desktop Chrome"] },
+      use: {
+        ...devices["Desktop Chrome"],
+        storageState: "./auth/userSession.json",
+        viewport: { width: 1366, height: 768 },
+      },
+      dependencies: ["setup"],
     },
 
     {
