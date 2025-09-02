@@ -1,5 +1,4 @@
 import { Page, Locator, expect } from "@playwright/test";
-import { NavPage } from "./NavPage";
 /**
  * This is the page object for the LoginPage Page.
  * @export
@@ -31,18 +30,19 @@ export class LoginPage {
   get signInButton(): Locator {
     return this.page.getByRole("button", {
       name: "Sign in",
+      exact: true,
     });
   }
 
-  async login(
-    email: string,
-    password: string,
-    navPage: NavPage
-  ): Promise<void> {
+  async login(email: string, password: string): Promise<void> {
     await this.emailInput.fill(email);
     await this.passwordInput.fill(password);
     await this.signInButton.click();
 
-    expect(navPage.logoutButton).toBeVisible();
+    await expect(
+      this.page.locator("h5", {
+        hasText: process.env.USER_NAME,
+      })
+    ).toBeVisible();
   }
 }
