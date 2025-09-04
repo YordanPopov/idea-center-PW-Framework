@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test:testing": "cross-env ENVIRONMENT=testing npx playwright test"
+    "test:testing": "cross-env ENVIRONMENT=testing npx playwright test",
+    "test:sanity": "npx playwright test --grep @Sanity --project=chromium"
   },
   "keywords": [],
   "author": "",
