@@ -35,9 +35,13 @@ export default defineConfig({
   use: {
     /* Base URL to use in actions like `await page.goto('/')`. */
     // baseURL: 'http://localhost:3000',
-
+    actionTimeout: 5000,
     /* Collect trace when retrying the failed test. See https://playwright.dev/docs/trace-viewer */
     trace: "on-first-retry",
+  },
+
+  expect: {
+    timeout: 5000,
   },
 
   /* Configure projects for major browsers */
@@ -55,7 +59,7 @@ export default defineConfig({
       name: "chromium",
       use: {
         ...devices["Desktop Chrome"],
-        storageState: "./auth/userSession.json",
+        storageState: "./.auth/userSession.json",
         viewport: { width: 1366, height: 768 },
       },
       dependencies: ["setup"],
