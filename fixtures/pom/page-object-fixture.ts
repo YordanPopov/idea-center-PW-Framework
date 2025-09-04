@@ -4,6 +4,7 @@ import { NavPage } from "../../pages/clientSite/NavPage";
 import { LoginPage } from "../../pages/clientSite/LoginPage";
 import { CreateIdeaPage } from "../../pages/clientSite/CreateIdeaPage";
 import { MyIdeasPage } from "../../pages/clientSite/MyIdeasPage";
+import { EditIdeaPage } from "../../pages/clientSite/EditIdeaPage";
 
 export type FrameworkFixtures = {
   homePage: HomePage;
@@ -15,6 +16,8 @@ export type FrameworkFixtures = {
   createIdeaPage: CreateIdeaPage;
 
   myIdeasPage: MyIdeasPage;
+
+  editIdeaPage: EditIdeaPage;
 };
 
 export const test = base.extend<FrameworkFixtures>({
@@ -36,6 +39,10 @@ export const test = base.extend<FrameworkFixtures>({
 
   myIdeasPage: async ({ page }, use) => {
     await use(new MyIdeasPage(page));
+  },
+
+  editIdeaPage: async ({ page }, use) => {
+    await use(new EditIdeaPage(page));
   },
 });
 
