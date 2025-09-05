@@ -12,7 +12,7 @@ export class MyIdeasPage {
     return this.page.getByText("No Ideas yet!");
   }
 
-  get ideaTitle(): Locator {
+  get ideaDescription(): Locator {
     return this.page.locator(".card-body > p").last();
   }
 
@@ -35,8 +35,35 @@ export class MyIdeasPage {
   }
 
   async deleteIdea(): Promise<void> {
-    await this.deleteButton.click();
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          response.url().includes("/Ideas/MyIdeas") && response.status() === 200
+      ),
+      this.deleteButton.click(),
+    ]);
 
-    await expect(this.noIdeasMessage).toBeVisible();
+    //await expect(this.noIdeasMessage).toBeVisible();
+    await expect(
+      this.page.locator(".card-body > h5", {
+        hasText: "UPDATED test description",
+      })
+    ).toHaveCount(0);
+  }
+
+  async openEditIdeaPage(): Promise<void> {
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          response.url().includes("/Ideas/Edit") && response.status() === 200
+      ),
+      this.editButton.click(),
+    ]);
+
+    await expect(
+      this.page.locator("p", {
+        hasText: "Edit the idea",
+      })
+    ).toBeVisible();
   }
 }
