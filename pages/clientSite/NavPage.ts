@@ -1,6 +1,4 @@
 import { Page, Locator, expect } from "@playwright/test";
-import { LoginPage } from "./LoginPage";
-import { CreateIdeaPage } from "./CreateIdeaPage";
 /**
  * This is the page object for the NavPage Page.
  * @export
@@ -58,19 +56,41 @@ export class NavPage {
       exact: true,
     });
   }
-
+  /**
+   * Navigate to the Home page using HomePage link
+   *  @returns {Promise<void>} - Resolves when navigation is complete.
+   */
   async navigateToHomePageByLink(): Promise<void> {
     await this.homePageNavigationLink.click();
   }
 
+  /**
+   * Navigate to the Home page using home page icon
+   * @returns {Promise<void>} - Resolves when navigation is complete.
+   */
   async navigateToHomePageByLogo(): Promise<void> {
     await this.homePageNavigationLogo.click();
   }
 
-  async openLoginPage(loginPage: LoginPage): Promise<void> {
-    await this.loginNavigationLink.click();
+  /**
+   * Navigate to the Login page using navigation link
+   * @returns {Promise<void>} - Resolves when navigation to the login page is complete.
+   */
+  async openLoginPage(): Promise<void> {
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          response.url().includes("/Users/Login") && response.status() === 200
+      ),
 
-    await expect(loginPage.loginPageHeading).toBeVisible();
+      this.loginNavigationLink.click(),
+    ]);
+
+    await expect(
+      this.page.getByRole("heading", {
+        name: "Sign in",
+      })
+    ).toBeVisible();
   }
 
   async openSignUpPage(): Promise<void> {
@@ -79,10 +99,24 @@ export class NavPage {
     // expect signUp page heading to be visible
   }
 
-  async openCreateIdeaPage(createIdeaPage: CreateIdeaPage): Promise<void> {
-    await this.createIdeaLink.click();
+  /**
+   * Navigate to the Create Idea Page
+   * @returns {Promise<void>} - Resolves when navigation to the create idea page is complete.
+   */
+  async openCreateIdeaPage(): Promise<void> {
+    await Promise.all([
+      this.page.waitForResponse(
+        (response) =>
+          response.url().includes("/Ideas/Create") && response.status() === 200
+      ),
+      this.createIdeaLink.click(),
+    ]);
 
-    await expect(createIdeaPage.createIdeaHeading).toBeVisible();
+    await expect(
+      this.page.locator("p", {
+        hasText: "Create new idea",
+      })
+    ).toBeVisible();
   }
 
   async logout(): Promise<void> {
