@@ -28,7 +28,7 @@ export class CreateIdeaPage {
 
   get ideaDescriptionInput(): Locator {
     return this.page.getByRole("textbox", {
-      name: "Description",
+      name: "Describe your idea",
     });
   }
 
@@ -38,18 +38,41 @@ export class CreateIdeaPage {
     });
   }
 
-  async createIdea(
-    ideaTitle: string,
-    description: string,
-    imgUrl?: string
-  ): Promise<void> {
-    await this.ideaTitleInput.fill(ideaTitle);
+  /**
+   * Create an idea. imgUrl can be optionally filled.
+   *
+   * @param {object} params - Object with optional idea fields
+   * @param {string} [params.title] - title for the idea
+   * @param {string} [params.imgUrl] - image URL
+   * @param {string} [params.description] - description
+   * @returns {Promise<void>} - Resolves when creating is complete.
+   */
+
+  async createIdea(params: {
+    title: string;
+    imgUrl?: string;
+    description: string;
+  }): Promise<void> {
+    const { title, imgUrl, description } = params;
+
+    await this.ideaTitleInput.fill(title);
     await this.ideaDescriptionInput.fill(description);
 
     if (imgUrl) {
       await this.ideaPictureInput.fill(imgUrl);
     }
-    await this.createIdeaButton.click();
-    await this.page.waitForResponse(`${process.env.URL}/Ideas/MyIdeas`);
+
+    await Promise.all([
+      this.page.waitForResponse(
+        (resp) => resp.url().includes("/Ideas/MyIdeas") && resp.status() === 200
+      ),
+      this.createIdeaButton.click(),
+    ]);
+
+    await expect(
+      this.page.locator(".card-body > p", {
+        hasText: description,
+      })
+    ).toBeVisible();
   }
 }
