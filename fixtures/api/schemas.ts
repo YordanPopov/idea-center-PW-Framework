@@ -1,4 +1,3 @@
-import { title } from "process";
 import { z } from "zod";
 
 export const UserSchema = z.object({
@@ -10,14 +9,9 @@ export const UserSchema = z.object({
 export const ErrorResponseSchema = z.object({
   type: z.string(),
   title: z.string(),
-  status: z.number(),
+  status: z.number().int().min(100).max(599),
   traceId: z.string(),
-  errors: z.object({
-    Email: z.array(z.string()).optional(),
-    UserName: z.array(z.string()).optional(),
-    Password: z.array(z.string()).optional(),
-    Repassword: z.array(z.string()).optional(),
-  }),
+  errors: z.record(z.string(), z.array(z.string().min(1))),
 });
 
 export const CreateIdeaResponseSchema = z.object({
@@ -29,12 +23,14 @@ export const CreateIdeaResponseSchema = z.object({
   }),
 });
 
-export const IdeaResponseSchema = z.object({
-  id: z.string(),
-  title: z.string(),
-  description: z.string(),
-  url: z.string().nullable(),
-  authorUsername: z.string(),
-  createdOn: z.string(),
-  updatedOn: z.string(),
-});
+export const IdeaResponseSchema = z.array(
+  z.object({
+    id: z.string(),
+    title: z.string(),
+    description: z.string(),
+    url: z.string().nullable(),
+    authorUsername: z.string(),
+    createdOn: z.string(),
+    updatedOn: z.string(),
+  })
+);
