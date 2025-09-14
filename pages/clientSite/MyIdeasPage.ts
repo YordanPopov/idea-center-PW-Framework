@@ -43,7 +43,7 @@ export class MyIdeasPage {
       this.deleteButton.click(),
     ]);
 
-    //await expect(this.noIdeasMessage).toBeVisible();
+    await expect(this.noIdeasMessage).toBeVisible();
     await expect(
       this.page.locator(".card-body > h5", {
         hasText: "UPDATED test description",
