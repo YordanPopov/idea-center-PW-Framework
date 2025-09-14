@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:testing": "cross-env ENVIRONMENT=testing npx playwright test",
-    "test:sanity": "npx playwright test --grep @Sanity --project=chromium"
+    "test:sanity": "npx playwright test --grep @Sanity --project=chromium",
+    "test:api": "npx playwright test --grep @Api --project=chromium"
   },
   "keywords": [],
   "author": "",
