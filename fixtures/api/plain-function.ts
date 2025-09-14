@@ -28,7 +28,7 @@ export async function apiRequest({
 
   if (headers) {
     options.headers = {
-      Authorization: `Token ${headers}`,
+      Authorization: `Bearer ${headers}`,
       "Content-Type": "application/json",
     };
   } else {
