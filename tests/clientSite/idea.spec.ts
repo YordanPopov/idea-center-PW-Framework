@@ -1,4 +1,6 @@
-import { test } from "../../fixtures/pom/test-options";
+import { IdeaResponseSchema } from "../../fixtures/api/schemas";
+import { IdeaResponse } from "../../fixtures/api/types-guards";
+import { test, expect } from "../../fixtures/pom/test-options";
 
 test.describe("Verify Create/Edit/Delete an Idea", () => {
   const ideaTitle = "test title";
@@ -10,7 +12,7 @@ test.describe("Verify Create/Edit/Delete an Idea", () => {
 
   test(
     "Verify Create/Edit/Delete an Idea",
-    { tag: "@Sanity" },
+    { tag: "@Smoke" },
     async ({ navPage, createIdeaPage, myIdeasPage, editIdeaPage }) => {
       await test.step("Verify Create an Idea", async () => {
         await navPage.openCreateIdeaPage();
@@ -35,4 +37,40 @@ test.describe("Verify Create/Edit/Delete an Idea", () => {
       });
     }
   );
+
+  test.afterAll(async ({ apiRequest }) => {
+    await test.step("Cleanup: Delete any remaning ideas", async () => {
+      try {
+        const { status, body } = await apiRequest<IdeaResponse>({
+          method: "GET",
+          url: "Idea/All",
+          baseUrl: process.env.API_URL,
+          headers: process.env.ACCESS_TOKEN,
+        });
+
+        if (status === 200 && body && Array.isArray(body)) {
+          const ideas = IdeaResponseSchema.parse(body);
+
+          for (const idea of ideas) {
+            if (
+              idea.title.includes(ideaTitle) ||
+              idea.title.includes(`UPDATED ${ideaTitle}`) ||
+              idea.description.includes(ideaDesc)
+            ) {
+              const deleteResponse = await apiRequest({
+                method: "DELETE",
+                url: `Idea/Delete?IdeaId=${idea.id}`,
+                baseUrl: process.env.API_URL,
+                headers: process.env.ACCESS_TOKEN,
+              });
+
+              expect(status).toBe(200);
+            }
+          }
+        }
+      } catch (error) {
+        console.warn("Cleanup failed: ", error);
+      }
+    });
+  });
 });
