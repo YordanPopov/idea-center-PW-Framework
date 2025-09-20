@@ -21,7 +21,7 @@ runs:
   steps:
     - name: Upload BLOB Report
       uses: actions/upload-artifact@v4
-      if: ${{ inputs.blob-report-upload === "true" || inputs.test-step-outcome === "failure"}}
+      if: ${{ inputs.blob-report-upload == "true" || inputs.test-step-outcome == "failure"}}
       with:
         name: blob-report-${{ github.job}}
         path: ${{ input.blob-report-path}}
