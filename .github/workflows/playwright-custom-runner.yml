@@ -132,7 +132,7 @@ jobs:
     needs: build-report
     environment:
       name: github-pages
-      url: "https://idavidov13.github.io/Playwright-Framework/"
+      url: "https://YordanPopov.github.io/idea-center-PW-Framework"
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
