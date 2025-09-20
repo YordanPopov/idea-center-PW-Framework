@@ -2,7 +2,9 @@ name: Playwright Tests on Custom Runner Extended
 
 on:
   push:
-    branches: [main]
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
   workflow_dispatch:
 
 env:
@@ -26,29 +28,32 @@ jobs:
     name: Setup and Smoke Test
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    outputs:
+      smoke_outcome: ${{ steps.smoke.outcome }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Playwright Setup on runner
+      - name: Playwright Setup on Runner
         uses: ./.github/actions/playwright-setup
 
-      - name: Run Smoke Test
+      - name: Run Smoke tests
         id: smoke
         run: npm run smoke
 
-      - name: Upload Smoke Blob Report
+      - name: Upload Playwright Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/playwright-report
         with:
-          name: blob-report-smoke
-          path: smoke-blob-report
+          test-step-outcome: ${{ steps.smoke.outcome }}
 
   api-test:
-    name: API test
+    name: API Test
     needs: setup-and-smoke-test
     timeout-minutes: 60
     runs-on: ubuntu-latest
+    outputs:
+      api_outcome: ${{ steps.api.outcome }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -60,12 +65,11 @@ jobs:
         id: api
         run: npm run api
 
-      - name: Upload API blob Report
+      - name: Upload Playwright Report
         if: always()
-        uses: actions/upload-artifact@v4
+        uses: ./.github/actions/playwright-report
         with:
-          name: blob-report-api
-          path: api-blob-report
+          test-step-outcome: ${{ steps.api.outcome }}
 
   merge-report:
     name: Merge Report
@@ -85,7 +89,7 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Download blob reports
+      - name: Download blob reports from GitHub Actions Artifacts
         uses: actions/download-artifact@v4
         with:
           path: all-blob-reports
@@ -128,7 +132,7 @@ jobs:
     needs: build-report
     environment:
       name: github-pages
-      url: "https://YordanPopov.github.io/idea-center-PW-Framework/"
+      url: "https://idavidov13.github.io/Playwright-Framework/"
     runs-on: ubuntu-latest
     steps:
       - name: Deploy to GitHub Pages
