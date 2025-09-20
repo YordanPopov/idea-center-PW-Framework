@@ -37,7 +37,7 @@ jobs:
 
       - name: Run Smoke Test
         id: smoke
-        run: npm run test:smoke
+        run: npm run smoke
 
       - name: Upload Playwright Report
         if: always()
@@ -61,7 +61,7 @@ jobs:
 
       - name: Run API tests
         id: api
-        run: npm run test:api
+        run: npm run api
 
       - name: Upload Playwright Report
         if: always()
