@@ -94,6 +94,9 @@ jobs:
           pattern: blob-report-*
           merge-multiple: true
 
+      - name: Ensure blob reports folder exists
+        run: mkdir -p all-blob-reports
+
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
 
