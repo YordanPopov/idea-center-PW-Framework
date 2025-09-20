@@ -24,5 +24,5 @@ runs:
       if: ${{ inputs.blob-report-upload == 'true' || inputs.test-step-outcome == 'failure'}}
       with:
         name: blob-report-${{ github.job}}
-        path: ${{ input.blob-report-path}}
+        path: ${{ inputs.blob-report-path}}
         retention-days: ${{ inputs.blob-report-retention-days}}
