@@ -18,20 +18,20 @@ runs:
         node-version: lts/*
 
     - name: Cache dependencies
-      if: inputs.caching-dependencies == "true"
+      if: inputs.caching-dependencies == 'true'
       id: cache-dependencies
       uses: actions/cache@v4
       with:
         path: notde_modules
-        key: deps-node-modules-${{ hashFiles("**/package-lock.json")}}
+        key: deps-node-modules-${{ hashFiles('**/package-lock.json')}}
 
     - name: Install dependencies
-      if: steps.cache-dependencies.outputs.cache-hit != "true" || inputs.caching-dependencies != "true"
+      if: steps.cache-dependencies.outputs.cache-hit != 'true' || inputs.caching-dependencies != 'true'
       run: npm ci
       shell: bash
 
     - name: Cache Playwright Browsers
-      if: inputs.caching-browsers == "true"
+      if: inputs.caching-browsers == 'true'
       id: cache-browsers
       uses: actions/cache@v4
       with:
@@ -39,6 +39,6 @@ runs:
         key: playwright-browsers-${{ runner.os }}
 
     - name: Install Playwright Browsers
-      if: steps.cache-browsers.outputs.cache-hit != "true" || inputs.caching-browsers != "true"
+      if: steps.cache-browsers.outputs.cache-hit != 'true' || inputs.caching-browsers != 'true'
       run: npx playwright install --with-deps chromium
       shell: bash
