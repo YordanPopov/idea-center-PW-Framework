@@ -2,7 +2,7 @@ name: Playwright Tests on Custom Runner Extended
 
 on:
   push:
-    branches:: [main, master]
+    branches: [main]
   workflow_dispatch:
 
 env:
@@ -26,8 +26,6 @@ jobs:
     name: Setup and Smoke Test
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    outputs:
-      smoke-outcome: ${{ steps.smoke.outcome }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -39,19 +37,18 @@ jobs:
         id: smoke
         run: npm run smoke
 
-      - name: Upload Playwright Report
+      - name: Upload Smoke Blob Report
         if: always()
-        uses: ./.github/actions/playwright-report
+        uses: actions/upload-artifact@v4
         with:
-          test-step-outcome: ${{ steps.smoke.outcome }}
+          name: blob-report-smoke
+          path: smoke-blob-report
 
   api-test:
     name: API test
     needs: setup-and-smoke-test
     timeout-minutes: 60
     runs-on: ubuntu-latest
-    outputs:
-      api_outcome: ${{ steps.api.outcome }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -63,11 +60,12 @@ jobs:
         id: api
         run: npm run api
 
-      - name: Upload Playwright Report
+      - name: Upload API blob Report
         if: always()
-        uses: ./.github/actions/playwright-report
+        uses: actions/upload-artifact@v4
         with:
-          test-step-outcome: ${{ steps.api.outcome }}
+          name: blob-report-api
+          path: api-blob-report
 
   merge-report:
     name: Merge Report
@@ -87,15 +85,12 @@ jobs:
       - name: Install Dependencies
         run: npm ci
 
-      - name: Download blob reports from GitHub Actions Artifacts
+      - name: Download blob reports
         uses: actions/download-artifact@v4
         with:
           path: all-blob-reports
           pattern: blob-report-*
           merge-multiple: true
-
-      - name: Ensure blob reports folder exists
-        run: mkdir -p all-blob-reports
 
       - name: Merge into HTML Report
         run: npx playwright merge-reports --reporter html ./all-blob-reports
