@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test:testing": "cross-env ENVIRONMENT=testing npx playwright test",
-    "smoke": "npx playwright test --grep @Smoke --project=chromium",
-    "api": "npx playwright test --grep @Api --project=chromium"
+    "smoke": "npx playwright test --grep @Smoke --reporter=blob --output=smoke-blob-report",
+    "api": "npx playwright test --grep @Api --reporter=blob --output=api-blob-repor"
   },
   "keywords": [],
   "author": "",
