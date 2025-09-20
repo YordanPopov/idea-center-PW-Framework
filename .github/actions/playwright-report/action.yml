@@ -13,7 +13,7 @@ inputs:
     required: false
     default: "3"
   blob-report-path:
-    description: "path for blob report"
+    description: "Path for blob report"
     required: false
     default: "blob-report"
 runs:
@@ -21,8 +21,8 @@ runs:
   steps:
     - name: Upload BLOB Report
       uses: actions/upload-artifact@v4
-      if: ${{ inputs.blob-report-upload == 'true' || inputs.test-step-outcome == 'failure'}}
+      if: ${{ inputs.blob-report-upload == 'true' || inputs.test-step-outcome == 'failure' }}
       with:
-        name: blob-report-${{ github.job}}
-        path: ${{ inputs.blob-report-path}}
-        retention-days: ${{ inputs.blob-report-retention-days}}
+        name: blob-report-${{ github.job }}
+        path: ${{ inputs.blob-report-path }}
+        retention-days: ${{ inputs.blob-report-retention-days }}
