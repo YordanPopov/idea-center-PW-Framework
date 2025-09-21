@@ -1,3 +1,4 @@
+/* eslint-disable playwright/no-conditional-in-test */
 import { IdeaResponseSchema } from '../../fixtures/api/schemas';
 import { IdeaResponse } from '../../fixtures/api/types-guards';
 import { test, expect } from '../../fixtures/pom/test-options';
@@ -64,12 +65,14 @@ test.describe('Verify Create/Edit/Delete an Idea', () => {
                                 headers: process.env.ACCESS_TOKEN,
                             });
 
-                            expect(status).toBe(200);
+                            expect(deleteResponse.status).toBe(200);
                         }
                     }
                 }
             } catch (error) {
-                console.warn('Cleanup failed: ', error);
+                await test.info().attach('cleanup-error', {
+                    body: String(error),
+                });
             }
         });
     });

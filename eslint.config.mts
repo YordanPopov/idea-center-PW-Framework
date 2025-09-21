@@ -54,6 +54,7 @@ const config = [
             'playwright/no-page-pause': 'error',
             'playwright/no-useless-await': 'error',
             'playwright/no-skipped-test': 'error',
+            'linebreak-style': ['error', 'unix'],
         },
     },
 ];

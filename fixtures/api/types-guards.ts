@@ -1,30 +1,30 @@
-import { z } from "zod";
+import { z } from 'zod';
 import type {
-  CreateIdeaResponseSchema,
-  UserSchema,
-  ErrorResponseSchema,
-  IdeaResponseSchema,
-} from "./schemas";
+    CreateIdeaResponseSchema,
+    UserSchema,
+    ErrorResponseSchema,
+    IdeaResponseSchema,
+} from './schemas';
 
 export type ApiRequestParams = {
-  method: "GET" | "POST" | "PUT" | "DELETE";
-  url: string;
-  baseUrl?: string;
-  body?: Record<string, unknown> | null;
-  headers?: string;
+    method: 'GET' | 'POST' | 'PUT' | 'DELETE';
+    url: string;
+    baseUrl?: string;
+    body?: Record<string, unknown> | null;
+    headers?: string;
 };
 
 export type ApiRequestResponse<T = unknown> = {
-  status: number;
-  body: T;
+    status: number;
+    body: T;
 };
 
 export type ApiRequestFn = <T = unknown>(
-  params: ApiRequestParams
+    params: ApiRequestParams
 ) => Promise<ApiRequestResponse<T>>;
 
 export type ApiRequestMethods = {
-  apiRequest: ApiRequestFn;
+    apiRequest: ApiRequestFn;
 };
 
 export type User = z.infer<typeof UserSchema>;
