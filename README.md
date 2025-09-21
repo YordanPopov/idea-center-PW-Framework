@@ -35,6 +35,7 @@ It covers:
 
 ## Project Structure
 
+```plaintext
 /
 ├─ fixtures/ # fixtures, helpers (API, schemas, types)
 ├─ pages/ # Page Object Model (UI objects)
@@ -45,6 +46,9 @@ It covers:
 ├─ tsconfig.json
 ├─ package.json
 ├─ README.md
+```
+
+---
 
 ## Requirements
 
