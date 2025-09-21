@@ -1,4 +1,4 @@
-import { Page, Locator, expect } from "@playwright/test";
+import { Page, Locator, expect } from '@playwright/test';
 /**
  * This is the page object for the HomePage Page.
  * @export
@@ -6,15 +6,15 @@ import { Page, Locator, expect } from "@playwright/test";
  * @typedef {HomePage}
  */
 export class HomePage {
-  constructor(private page: Page) {}
+    constructor(private page: Page) {}
 
-  get homePageCarousel(): Locator {
-    return this.page.locator(".carousel");
-  }
+    get homePageCarousel(): Locator {
+        return this.page.locator('.carousel');
+    }
 
-  async navigateToHomePage(): Promise<void> {
-    await this.page.goto(process.env.URL as string);
+    async navigateToHomePage(): Promise<void> {
+        await this.page.goto(process.env.URL as string);
 
-    expect(this.homePageCarousel).toBeVisible();
-  }
+        expect(this.homePageCarousel).toBeVisible();
+    }
 }
