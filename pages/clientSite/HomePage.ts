@@ -15,6 +15,6 @@ export class HomePage {
     async navigateToHomePage(): Promise<void> {
         await this.page.goto(process.env.URL as string);
 
-        expect(this.homePageCarousel).toBeVisible();
+        await expect(this.homePageCarousel).toBeVisible();
     }
 }
