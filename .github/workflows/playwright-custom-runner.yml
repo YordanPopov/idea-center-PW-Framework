@@ -33,6 +33,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+              with:
+                  clean: true
 
             - name: Playwright Setup on Runner
               uses: ./.github/actions/playwright-setup
