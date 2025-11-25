@@ -60,6 +60,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+              with:
+                  clean: true
 
             - name: Playwright Setup on Runner
               uses: ./.github/actions/playwright-setup
@@ -83,6 +85,8 @@ jobs:
         steps:
             - name: Checkout code
               uses: actions/checkout@v4
+              with:
+                  clean: true
 
             - name: Setup Node.js
               uses: actions/setup-node@v4
@@ -117,6 +121,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
+              with:
+                  clean: true
 
             - name: Download Merged HTML Reports
               uses: actions/download-artifact@v4
