@@ -1,7 +1,7 @@
 /* eslint-disable playwright/no-conditional-in-test */
-import { IdeaResponseSchema } from '../../fixtures/api/schemas';
-import { IdeaResponse } from '../../fixtures/api/types-guards';
-import { test, expect } from '../../fixtures/pom/test-options';
+import { IdeaResponseSchema } from '@fixtures/api/schemas';
+import { IdeaResponse } from '@fixtures/api/types-guards';
+import { test, expect } from '@fixtures/pom/test-options';
 
 test.describe('Verify Create/Edit/Delete an Idea', () => {
     const ideaTitle = 'test title';
@@ -14,9 +14,9 @@ test.describe('Verify Create/Edit/Delete an Idea', () => {
     test(
         'Verify Create/Edit/Delete an Idea',
         { tag: '@Smoke' },
-        async ({ navPage, createIdeaPage, myIdeasPage, editIdeaPage }) => {
+        async ({ navBar, createIdeaPage, myIdeasPage, editIdeaPage }) => {
             await test.step('Verify Create an Idea', async () => {
-                await navPage.openCreateIdeaPage();
+                await navBar.openCreateIdeaPage();
 
                 await createIdeaPage.createIdea({
                     title: ideaTitle,

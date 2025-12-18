@@ -1,12 +1,9 @@
-import {
-    CreateIdeaResponse,
-    IdeaResponse,
-} from '../../fixtures/api/types-guards';
+import { CreateIdeaResponse, IdeaResponse } from '@fixtures/api/types-guards';
 import {
     CreateIdeaResponseSchema,
     IdeaResponseSchema,
-} from '../../fixtures/api/schemas';
-import { expect, test } from '../../fixtures/pom/test-options';
+} from '@fixtures/api/schemas';
+import { expect, test } from '@fixtures/pom/test-options';
 import ideaData from '../../test-data/ideaData.json';
 
 test.describe('Verify CRUD Idea', () => {
