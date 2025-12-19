@@ -2,11 +2,9 @@
 import { IdeaResponseSchema } from '@fixtures/api/schemas';
 import { IdeaResponse } from '@fixtures/api/types-guards';
 import { test, expect } from '@fixtures/pom/test-options';
+import idea from '@test-data/ideaData.json';
 
 test.describe('Verify Create/Edit/Delete an Idea', () => {
-    const ideaTitle = 'test title';
-    const ideaDesc = 'test description';
-
     test.beforeEach(async ({ homePage }) => {
         await homePage.navigateToHomePage();
     });
@@ -19,8 +17,8 @@ test.describe('Verify Create/Edit/Delete an Idea', () => {
                 await navBar.openCreateIdeaPage();
 
                 await createIdeaPage.createIdea({
-                    title: ideaTitle,
-                    description: ideaDesc,
+                    title: idea.title,
+                    description: idea.description,
                 });
             });
 
@@ -28,8 +26,8 @@ test.describe('Verify Create/Edit/Delete an Idea', () => {
                 await myIdeasPage.openEditIdeaPage();
 
                 await editIdeaPage.editIdea({
-                    title: `UPDATED ${ideaTitle}`,
-                    description: `UPDATED ${ideaDesc}`,
+                    title: `UPDATED ${idea.title}`,
+                    description: `UPDATED ${idea.description}`,
                 });
             });
 
@@ -53,20 +51,14 @@ test.describe('Verify Create/Edit/Delete an Idea', () => {
                     const ideas = IdeaResponseSchema.parse(body);
 
                     for (const idea of ideas) {
-                        if (
-                            idea.title.includes(ideaTitle) ||
-                            idea.title.includes(`UPDATED ${ideaTitle}`) ||
-                            idea.description.includes(ideaDesc)
-                        ) {
-                            const deleteResponse = await apiRequest({
-                                method: 'DELETE',
-                                url: `Idea/Delete?IdeaId=${idea.id}`,
-                                baseUrl: process.env.API_URL,
-                                headers: process.env.ACCESS_TOKEN,
-                            });
+                        const deleteResponse = await apiRequest({
+                            method: 'DELETE',
+                            url: `Idea/Delete?IdeaId=${idea.id}`,
+                            baseUrl: process.env.API_URL,
+                            headers: process.env.ACCESS_TOKEN,
+                        });
 
-                            expect(deleteResponse.status).toBe(200);
-                        }
+                        expect(deleteResponse.status).toBe(200);
                     }
                 }
             } catch (error) {
