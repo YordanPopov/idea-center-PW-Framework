@@ -1,12 +1,5 @@
 {
-  "create": {
     "title": "AI-Powered Code Review Assistant",
     "url": "https://img.freepik.com/free-photo/programming-background-collage_23-2149901780.jpg",
-    "description": "Automated code review tool that suggests improvements and catches bugs using machine learning"
-  },
-  "update": {
-    "title": "Smart Office Space Manager",
-    "url": "https://www.cloudblue.com/wp-content/uploads/2024/06/what-is-the-internet-of-things-iot.png",
-    "description": "IoT-based system for optimizing office space utilization and employee comfort"
-  }
+    "description": "Automated code review tool"
 }
