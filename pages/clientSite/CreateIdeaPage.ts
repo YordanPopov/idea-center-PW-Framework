@@ -1,18 +1,13 @@
 import { Page, Locator, expect } from '@playwright/test';
+
 /**
- * This is the page object for the CreateIdeaPage Page.
+ * This is the page object for the CreateIdea Page.
  * @export
  * @class CreateIdeaPage
  * @typedef {CreateIdeaPage}
  */
-export class CreateIdeaPage {
+export default class CreateIdeaPage {
     constructor(private page: Page) {}
-
-    get createIdeaHeading(): Locator {
-        return this.page.getByRole('paragraph', {
-            name: 'Create new idea',
-        });
-    }
 
     get ideaTitleInput(): Locator {
         return this.page.getByRole('textbox', {
@@ -22,7 +17,7 @@ export class CreateIdeaPage {
 
     get ideaPictureInput(): Locator {
         return this.page.getByRole('textbox', {
-            name: 'Url',
+            name: 'Add Picture',
         });
     }
 
@@ -38,6 +33,18 @@ export class CreateIdeaPage {
         });
     }
 
+    get globalErrorMessage(): Locator {
+        return this.page.locator('.validation-summary-errors');
+    }
+
+    get titleErrorMessage(): Locator {
+        return this.page.locator('span[data-valmsg-for="Title"]');
+    }
+
+    get descriptionErrorMessage(): Locator {
+        return this.page.locator('span[data-valmsg-for="Description"]');
+    }
+
     /**
      * Create an idea. imgUrl can be optionally filled.
      *
@@ -47,7 +54,6 @@ export class CreateIdeaPage {
      * @param {string} [params.description] - description
      * @returns {Promise<void>} - Resolves when creating is complete.
      */
-
     async createIdea(params: {
         title: string;
         imgUrl?: string;
@@ -76,5 +82,53 @@ export class CreateIdeaPage {
                 hasText: description,
             })
         ).toBeVisible();
+    }
+
+    async attemptToCreareIdea(data: {
+        title?: string;
+        imgUrl?: string;
+        description?: string;
+        expect: {
+            globalError?: boolean;
+            titleError?: boolean;
+            descriptionError?: boolean;
+        };
+    }): Promise<void> {
+        const isTitleEmpty =
+            data.title === undefined || data.title.trim() == '';
+        const isDescriptionEmpty =
+            data.description === undefined || data.description.trim() === '';
+
+        if (data.title) {
+            await this.ideaTitleInput.fill(data.title);
+        }
+
+        if (data.imgUrl) {
+            await this.ideaPictureInput.fill(data.imgUrl);
+        }
+
+        if (data.description) {
+            await this.ideaDescriptionInput.fill(data.description);
+        }
+
+        await this.createIdeaButton.click();
+
+        if (data.expect.globalError) {
+            await expect(this.globalErrorMessage).toHaveText(
+                'Unable to create new Idea!'
+            );
+        }
+
+        if (data.expect.titleError || isTitleEmpty) {
+            await expect(this.titleErrorMessage).toHaveText(
+                'The Title field is required.'
+            );
+        }
+
+        if (data.expect.descriptionError || isDescriptionEmpty) {
+            await expect(this.descriptionErrorMessage).toHaveText(
+                'The Description field is required.'
+            );
+        }
     }
 }
