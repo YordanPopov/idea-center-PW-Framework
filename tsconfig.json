@@ -28,7 +28,8 @@
         "fixtures/**/*.ts",
         "pages/**/*.ts",
         "helpers/**/*.ts",
-        "enums/**/*.ts"
+        "enums/**/*.ts",
+        "test-data/**/*.ts"
     ],
     "exclude": ["node_modules", "dist", "playwright-report", "test-results"]
 }
