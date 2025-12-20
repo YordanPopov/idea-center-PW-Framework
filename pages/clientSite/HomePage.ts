@@ -1,11 +1,11 @@
 import { Page, Locator, expect } from '@playwright/test';
 /**
- * This is the page object for the HomePage Page.
+ * This is the page object for the Home Page.
  * @export
  * @class HomePage
  * @typedef {HomePage}
  */
-export class HomePage {
+export default class HomePage {
     constructor(private page: Page) {}
 
     get homePageCarousel(): Locator {
