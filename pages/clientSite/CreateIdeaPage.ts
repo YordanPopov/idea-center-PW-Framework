@@ -84,7 +84,7 @@ export default class CreateIdeaPage {
         ).toBeVisible();
     }
 
-    async attemptToCreareIdea(data: {
+    async attemptToCreateIdea(data: {
         title?: string;
         imgUrl?: string;
         description?: string;
