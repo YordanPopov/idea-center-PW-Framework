@@ -1,6 +1,12 @@
 import { test, expect } from '@fixtures/pom/test-options';
-import { ErrorResponseSchema } from '@fixtures/api/schemas';
-import { ErrorResponse } from '@fixtures/api/types-guards';
+import {
+    ErrorResponseSchema,
+    InvalidCredentialsSchema,
+} from '@fixtures/api/schemas';
+import {
+    ErrorResponse,
+    InvalidCredentialsResponse,
+} from '@fixtures/api/types-guards';
 import {
     invalidEmails,
     invalidPasswords,
@@ -13,18 +19,19 @@ test.describe('USER | AUTH | API | validation', () => {
         'LOGIN | invalid credentials',
         { tag: '@Api' },
         async ({ apiRequest }) => {
-            const { status, body } = await apiRequest<ErrorResponse>({
-                method: 'POST',
-                url: 'User/Authentication',
-                baseUrl: process.env.API_URL,
-                body: {
-                    email: invalidCredentials.email,
-                    password: invalidCredentials.password,
-                },
-            });
+            const { status, body } =
+                await apiRequest<InvalidCredentialsResponse>({
+                    method: 'POST',
+                    url: 'User/Authentication',
+                    baseUrl: process.env.API_URL,
+                    body: {
+                        email: invalidCredentials.email,
+                        password: invalidCredentials.password,
+                    },
+                });
 
             expect(status).toBe(400);
-            expect(ErrorResponseSchema.parse(body)).toBeTruthy();
+            expect(InvalidCredentialsSchema.parse(body)).toBeTruthy();
         }
     );
 
