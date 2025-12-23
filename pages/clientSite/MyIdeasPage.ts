@@ -1,11 +1,12 @@
 import { Page, Locator, expect } from '@playwright/test';
+
 /**
  * This is the page object for the MyIdeas Page.
  * @export
  * @class MyIdeasPage
  * @typedef {MyIdeasPage}
  */
-export class MyIdeasPage {
+export default class MyIdeasPage {
     constructor(private page: Page) {}
 
     get noIdeasMessage(): Locator {
@@ -34,6 +35,10 @@ export class MyIdeasPage {
         });
     }
 
+    /**
+     * Deletes an idea and waits for the deletion to complete
+     * @returns {Promise<void} - Resolves when the idea is deleted
+     */
     async deleteIdea(): Promise<void> {
         await Promise.all([
             this.page.waitForResponse(
@@ -45,13 +50,12 @@ export class MyIdeasPage {
         ]);
 
         await expect(this.noIdeasMessage).toBeVisible();
-        await expect(
-            this.page.locator('.card-body > h5', {
-                hasText: 'UPDATED test description',
-            })
-        ).toHaveCount(0);
     }
 
+    /**
+     * Open Edit Idea page
+     * @returns {Promise<void>} - Resolves when EditIdeaPage is opened
+     */
     async openEditIdeaPage(): Promise<void> {
         await Promise.all([
             this.page.waitForResponse(
@@ -66,6 +70,25 @@ export class MyIdeasPage {
             this.page.locator('p', {
                 hasText: 'Edit the idea',
             })
+        ).toBeVisible();
+    }
+
+    /**
+     * Open View Idea page
+     * @returns {Promise<void>} - Resolves when View Idea page is opened
+     */
+    async openViewIdeaPage(): Promise<void> {
+        await Promise.all([
+            this.page.waitForResponse(
+                (response) =>
+                    response.url().includes('Ideas/Read?') &&
+                    response.status() === 200
+            ),
+            this.viewButton.click(),
+        ]);
+
+        await expect(
+            this.page.locator('a', { hasText: process.env.USER_NAME })
         ).toBeVisible();
     }
 }

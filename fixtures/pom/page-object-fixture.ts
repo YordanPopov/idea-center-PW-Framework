@@ -1,15 +1,16 @@
 import { test as base } from '@playwright/test';
-import { HomePage } from '../../pages/clientSite/HomePage';
-import { NavPage } from '../../pages/clientSite/NavPage';
-import { LoginPage } from '../../pages/clientSite/LoginPage';
-import { CreateIdeaPage } from '../../pages/clientSite/CreateIdeaPage';
-import { MyIdeasPage } from '../../pages/clientSite/MyIdeasPage';
-import { EditIdeaPage } from '../../pages/clientSite/EditIdeaPage';
+
+import HomePage from '@pages/clientSite/HomePage';
+import NavBar from '@pages/clientSite/NavBar';
+import LoginPage from '@pages/clientSite/LoginPage';
+import CreateIdeaPage from '@pages/clientSite/CreateIdeaPage';
+import MyIdeasPage from '@pages/clientSite/MyIdeasPage';
+import EditIdeaPage from '@pages/clientSite/EditIdeaPage';
 
 export type FrameworkFixtures = {
     homePage: HomePage;
 
-    navPage: NavPage;
+    navBar: NavBar;
 
     loginPage: LoginPage;
 
@@ -25,8 +26,8 @@ export const test = base.extend<FrameworkFixtures>({
         await use(new HomePage(page));
     },
 
-    navPage: async ({ page }, use) => {
-        await use(new NavPage(page));
+    navBar: async ({ page }, use) => {
+        await use(new NavBar(page));
     },
 
     loginPage: async ({ page }, use) => {

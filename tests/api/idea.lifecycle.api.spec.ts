@@ -1,27 +1,28 @@
-import {
-    CreateIdeaResponse,
-    IdeaResponse,
-} from '../../fixtures/api/types-guards';
+import { CreateIdeaResponse, IdeaResponse } from '@fixtures/api/types-guards';
 import {
     CreateIdeaResponseSchema,
     IdeaResponseSchema,
-} from '../../fixtures/api/schemas';
-import { expect, test } from '../../fixtures/pom/test-options';
-import ideaData from '../../test-data/ideaData.json';
+} from '@fixtures/api/schemas';
+import { expect, test } from '@fixtures/pom/test-options';
+import { validIdeaData as idea } from '@test-data/ideaData';
 
-test.describe('Verify CRUD Idea', () => {
+test.describe('IDEA | API lifecycle', () => {
     test(
-        'Verify Create/Read/Update/Delete an Idea',
+        'IDEA | API | create -> read -> update -> delete',
         { tag: '@Api' },
         async ({ apiRequest }) => {
             let ideaID: string;
 
-            await test.step('Verify Create an Idea', async () => {
+            await test.step('Create an Idea', async () => {
                 const { status, body } = await apiRequest<CreateIdeaResponse>({
                     method: 'POST',
                     url: 'Idea/Create',
                     baseUrl: process.env.API_URL,
-                    body: ideaData.create,
+                    body: {
+                        title: idea.title,
+                        url: idea.url,
+                        description: idea.description,
+                    },
                     headers: process.env.ACCESS_TOKEN,
                 });
 
@@ -30,7 +31,7 @@ test.describe('Verify CRUD Idea', () => {
                 expect(body.msg).toContain('Successfully created!');
             });
 
-            await test.step('Verify Read an Idea', async () => {
+            await test.step('Read an Idea', async () => {
                 const { status, body } = await apiRequest<IdeaResponse>({
                     method: 'GET',
                     url: 'Idea/All',
@@ -43,12 +44,16 @@ test.describe('Verify CRUD Idea', () => {
                 ideaID = body[0].id;
             });
 
-            await test.step('Verify Update an Idea', async () => {
+            await test.step('Update an Idea', async () => {
                 const { status, body } = await apiRequest<CreateIdeaResponse>({
                     method: 'PUT',
                     url: `Idea/Edit?ideaId=${ideaID}`,
                     baseUrl: process.env.API_URL,
-                    body: ideaData.update,
+                    body: {
+                        title: `UPDATED - ${idea.title}`,
+                        url: idea.url,
+                        description: `UPDATED - ${idea.description}`,
+                    },
                     headers: process.env.ACCESS_TOKEN,
                 });
 
@@ -57,7 +62,7 @@ test.describe('Verify CRUD Idea', () => {
                 expect(body.msg).toContain('Edited successfully');
             });
 
-            await test.step('Verify Read an updated Idea', async () => {
+            await test.step('Read an updated Idea', async () => {
                 const { status, body } = await apiRequest<IdeaResponse>({
                     method: 'GET',
                     url: 'Idea/All',
@@ -67,11 +72,11 @@ test.describe('Verify CRUD Idea', () => {
 
                 expect(status).toBe(200);
                 expect(IdeaResponseSchema.parse(body)).toBeTruthy();
-                expect(body[0].title).toBe(ideaData.update.title);
+                expect(body[0].title).toContain(`UPDATED`);
                 ideaID = body[0].id;
             });
 
-            await test.step('Verify Delete an Idea', async () => {
+            await test.step('Delete an Idea', async () => {
                 const { status } = await apiRequest({
                     method: 'DELETE',
                     url: `Idea/Delete?IdeaId=${ideaID}`,

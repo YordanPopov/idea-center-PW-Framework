@@ -9,6 +9,11 @@
         "checkJs": false,
         "outDir": "./dist",
         "rootDir": ".",
+        "paths": {
+            "@pages/*": ["./pages/*"],
+            "@fixtures/*": ["./fixtures/*"],
+            "@test-data/*": ["./test-data/*"]
+        },
         "strict": true,
         "noImplicitAny": true,
         "skipLibCheck": true,
@@ -23,7 +28,8 @@
         "fixtures/**/*.ts",
         "pages/**/*.ts",
         "helpers/**/*.ts",
-        "enums/**/*.ts"
+        "enums/**/*.ts",
+        "test-data/**/*.ts"
     ],
     "exclude": ["node_modules", "dist", "playwright-report", "test-results"]
 }

@@ -1,34 +1,46 @@
-import { ErrorResponseSchema } from '../../fixtures/api/schemas';
-import { ErrorResponse } from '../../fixtures/api/types-guards';
-import { test, expect } from '../../fixtures/pom/test-options';
-import invalidCredentials from '../../test-data/invalidCredentials.json';
+import { test, expect } from '@fixtures/pom/test-options';
+import {
+    ErrorResponseSchema,
+    InvalidCredentialsSchema,
+} from '@fixtures/api/schemas';
+import {
+    ErrorResponse,
+    InvalidCredentialsResponse,
+} from '@fixtures/api/types-guards';
+import {
+    invalidEmails,
+    invalidPasswords,
+    invalidUsernames,
+    invalidCredentials,
+} from '@test-data/credentials';
 
-test.describe('Verify API Validation for Log In / Sign Up', () => {
+test.describe('USER | AUTH | API | validation', () => {
     test(
-        'Verify API Validation for Log In',
+        'LOGIN | invalid credentials',
         { tag: '@Api' },
         async ({ apiRequest }) => {
-            const { status, body } = await apiRequest<ErrorResponse>({
-                method: 'POST',
-                url: 'User/Authentication',
-                baseUrl: process.env.API_URL,
-                body: {
-                    email: invalidCredentials.invalidEmails[2],
-                    password: invalidCredentials.invalidPasswords[2],
-                },
-            });
+            const { status, body } =
+                await apiRequest<InvalidCredentialsResponse>({
+                    method: 'POST',
+                    url: 'User/Authentication',
+                    baseUrl: process.env.API_URL,
+                    body: {
+                        email: invalidCredentials.email,
+                        password: invalidCredentials.password,
+                    },
+                });
 
             expect(status).toBe(400);
-            expect(ErrorResponseSchema.parse(body)).toBeTruthy();
+            expect(InvalidCredentialsSchema.parse(body)).toBeTruthy();
         }
     );
 
     test(
-        'Verify API Validation for Sign Up',
+        'SIGN UP | invalid email, username, password',
         { tag: '@Api' },
         async ({ apiRequest }) => {
-            await test.step('Verify API Validation for Invalid Email', async () => {
-                for (const invalidEmail of invalidCredentials.invalidEmails) {
+            await test.step('SIGN UP | invalid email', async () => {
+                for (const invalidEmail of invalidEmails) {
                     const { status, body } = await apiRequest<ErrorResponse>({
                         method: 'POST',
                         url: 'User/Create',
@@ -47,8 +59,8 @@ test.describe('Verify API Validation for Log In / Sign Up', () => {
                 }
             });
 
-            await test.step('Verify API Validation for Invalid Username', async () => {
-                for (const invalidUsername of invalidCredentials.invalidUsernames) {
+            await test.step('SIGNUP | invalid username', async () => {
+                for (const invalidUsername of invalidUsernames) {
                     const { status, body } = await apiRequest<ErrorResponse>({
                         method: 'POST',
                         url: 'User/Create',
@@ -66,8 +78,8 @@ test.describe('Verify API Validation for Log In / Sign Up', () => {
                     expect(ErrorResponseSchema.parse(body)).toBeTruthy();
                 }
             });
-            await test.step('Verify API Validation for Invalid Password', async () => {
-                for (const invalidPassword of invalidCredentials.invalidPasswords) {
+            await test.step('SIGNUP | invalid password', async () => {
+                for (const invalidPassword of invalidPasswords) {
                     const { status, body } = await apiRequest<ErrorResponse>({
                         method: 'POST',
                         url: 'User/Create',
