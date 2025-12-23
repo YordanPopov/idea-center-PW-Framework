@@ -14,6 +14,8 @@ export const ErrorResponseSchema = z.object({
     errors: z.record(z.string(), z.array(z.string().min(1))),
 });
 
+export const InvalidCredentialsSchema = z.string();
+
 export const CreateIdeaResponseSchema = z.object({
     msg: z.string(),
     idea: z.object({

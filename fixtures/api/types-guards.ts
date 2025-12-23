@@ -4,6 +4,7 @@ import type {
     UserSchema,
     ErrorResponseSchema,
     IdeaResponseSchema,
+    InvalidCredentialsSchema,
 } from './schemas';
 
 export type ApiRequestParams = {
@@ -31,3 +32,6 @@ export type User = z.infer<typeof UserSchema>;
 export type ErrorResponse = z.infer<typeof ErrorResponseSchema>;
 export type CreateIdeaResponse = z.infer<typeof CreateIdeaResponseSchema>;
 export type IdeaResponse = z.infer<typeof IdeaResponseSchema>;
+export type InvalidCredentialsResponse = z.infer<
+    typeof InvalidCredentialsSchema
+>;
