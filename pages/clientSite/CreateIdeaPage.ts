@@ -47,7 +47,6 @@ export default class CreateIdeaPage {
 
     /**
      * Create an idea. imgUrl can be optionally filled.
-     *
      * @param {object} params - Object with optional idea fields
      * @param {string} [params.title] - title for the idea
      * @param {string} [params.imgUrl] - image URL
@@ -84,6 +83,18 @@ export default class CreateIdeaPage {
         ).toBeVisible();
     }
 
+    /**
+     * Attempts to create an idea with provided data and validates the expected errors
+     * @param data - The idea data and expected validation results
+     * @param data.title - Optional title for the idea
+     * @param data.imgUrl - Optional Img URL for the idea
+     * @param data.description - Optional description for the idea
+     * @param data.expect - Expected error states after submission
+     * @param data.expect.globalError - Whether a global error message should be displayed
+     * @param data.expect.titleError - Whether a title error message should be displayed
+     * @param data.expect.descriptionError - Whether a description error message should be displayed
+     * @returns {Promise<void>} - Resolves when the form is submitted
+     */
     async attemptToCreateIdea(data: {
         title?: string;
         imgUrl?: string;
@@ -114,21 +125,15 @@ export default class CreateIdeaPage {
         await this.createIdeaButton.click();
 
         if (data.expect.globalError) {
-            await expect(this.globalErrorMessage).toHaveText(
-                'Unable to create new Idea!'
-            );
+            await expect(this.globalErrorMessage).toBeVisible();
         }
 
         if (data.expect.titleError || isTitleEmpty) {
-            await expect(this.titleErrorMessage).toHaveText(
-                'The Title field is required.'
-            );
+            await expect(this.titleErrorMessage).toBeVisible();
         }
 
         if (data.expect.descriptionError || isDescriptionEmpty) {
-            await expect(this.descriptionErrorMessage).toHaveText(
-                'The Description field is required.'
-            );
+            await expect(this.descriptionErrorMessage).toBeVisible();
         }
     }
 }

@@ -1,4 +1,5 @@
 import { Page, Locator, expect } from '@playwright/test';
+
 /**
  * This is the page object for the NavBar Page.
  * @export
@@ -56,6 +57,7 @@ export default class NavBar {
             exact: true,
         });
     }
+
     /**
      * Navigate to the Home page using HomePage link
      *  @returns {Promise<void>} - Resolves when navigation is complete.
@@ -121,6 +123,25 @@ export default class NavBar {
         ).toBeVisible();
     }
 
+    /**
+     * Navigate to the MyIdeas Page
+     * @returns {Promise<void>} - Resolves when navigation to the MyIdeas page is complete.
+     */
+    async openMyIdeasPage(): Promise<void> {
+        await Promise.all([
+            this.page.waitForResponse(
+                (response) =>
+                    response.url().includes('/Ideas/MyIdeas') &&
+                    response.status() === 200
+            ),
+            this.myIdeasLink.click(),
+        ]);
+    }
+
+    /**
+     * Logout the user
+     * @returns {Promise<void>} - Resolves when user is logged out.
+     */
     async logout(): Promise<void> {
         await this.logoutButton.click();
 
